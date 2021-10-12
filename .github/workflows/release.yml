@@ -1,0 +1,26 @@
+on: 
+  release:
+    types: [created,published]
+
+name: Release Gop
+
+jobs:
+  releases-matrix:
+    name: Release Go Binary
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # build and publish in parallel: linux/amd64, windows/amd64, darwin/amd64 
+        goos: [linux, windows, darwin]
+        goarch: [amd64]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: wangyoucao577/go-release-action@v1.20
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        goos: ${{ matrix.goos }}
+        goarch: ${{ matrix.goarch }}
+        goversion: "https://dl.google.com/go/go1.16.9.linux-amd64.tar.gz"
+        pre_command: "export GOBIN=$PWD"
+        build_command: "make"
+        extra_files: gopfmt LICENSE README.md README_zh.md
