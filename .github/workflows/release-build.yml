@@ -26,6 +26,7 @@ jobs:
     
     - name: Check VERSION consistency
       run: |
+        pwd
         tag=$(git describe --tags --dirty)
         version=$(cat VERSION)
         if [ "$tag" != "$version" ]; then
@@ -34,6 +35,7 @@ jobs:
           echo "TAG: $tag"
           exit 1
         fi
+        cat VERSION
 
     - name: Set up Go
       uses: actions/setup-go@v5
